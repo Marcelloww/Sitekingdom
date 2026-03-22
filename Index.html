@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>KINGDOM CRAFT</title>
+
+<style>
+@import url('https://fonts.cdnfonts.com/css/minecraft-4');
+
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Minecraft', sans-serif;
+  text-align: center;
+}
+
+/* FUNDO CINZA ESCURO */
+.fundo {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: #555555;
+  z-index: 0;
+  transition: 0.5s;
+}
+
+/* TEXTO */
+.texto {
+  position: absolute;
+  width: 100%;
+  top: 30%;
+  z-index: 2;
+}
+
+.kingdom {
+  font-size: 60px;
+  color: black;
+  text-shadow:
+    -2px -2px 0 #fff,
+     2px -2px 0 #fff,
+    -2px  2px 0 #fff,
+     2px  2px 0 #fff;
+  position: relative;
+  left: -100%;
+  animation: kingdomIn 1s forwards;
+}
+
+.craft {
+  font-size: 50px;
+  color: yellow;
+  text-shadow: 3px 3px 0 #000;
+  position: relative;
+  top: -300px;
+  opacity: 0;
+  animation: craftDrop 1s forwards 1.2s;
+}
+
+/* BOTÃO */
+.botao {
+  position: absolute;
+  top: 65%;
+  width: 100%;
+  z-index: 2;
+  display: none;
+}
+
+button {
+  padding: 12px 25px;
+  font-size: 16px;
+  border: none;
+  background: orange;
+  color: black;
+  cursor: pointer;
+  margin: 8px;
+}
+
+/* MENU */
+.menu {
+  display: none;
+  position: absolute;
+  top: 55%;
+  width: 100%;
+  z-index: 3;
+}
+
+/* INFO */
+.info {
+  margin: 10px;
+  color: white;
+  font-size: 18px;
+  display: none;
+}
+
+/* ANIMAÇÕES */
+@keyframes kingdomIn {
+  to { left: 0; }
+}
+
+@keyframes craftDrop {
+  to { top: 0; opacity: 1; }
+}
+
+@keyframes shakeScreen {
+  0%, 100% { transform: translate(0,0); }
+  20% { transform: translate(-3px, 3px); }
+  40% { transform: translate(3px, -3px); }
+  60% { transform: translate(-2px,2px); }
+  80% { transform: translate(2px,-2px); }
+}
+
+/* TIROS PERMANENTES */
+.tiro {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+}
+</style>
+</head>
+
+<body>
+
+<div class="fundo" id="fundo"></div>
+
+<div class="texto" id="textoContainer">
+  <div class="kingdom" id="kingdom">KINGDOM</div>
+  <div class="craft" id="craft">CRAFT</div>
+</div>
+
+<div class="botao" id="botao">
+  <button onclick="abrirWhats()">💬 WhatsApp</button>
+  <button onclick="abrirDiscord()">🎮 Discord</button>
+  <button onclick="mostrarInfo()">ℹ️ Informações do servidor</button>
+
+  <div class="info" id="info">
+    <div>IP: aura.lura.host <button onclick="copiar('aura.lura.host')">COPIAR</button></div>
+    <div>PORTA: 35601 <button onclick="copiar('35601')">COPIAR</button></div>
+  </div>
+</div>
+
+<script>
+function copiar(texto) {
+  navigator.clipboard.writeText(texto);
+  alert("Copiado: " + texto);
+}
+
+function abrirWhats() {
+  window.open("https://wa.me/5588994642622", "_blank");
+}
+
+function abrirDiscord() {
+  window.open("https://discord.gg/tKjab9B4vw", "_blank");
+}
+
+function mostrarInfo() {
+  let info = document.getElementById("info");
+  info.style.display = info.style.display === "none" ? "block" : "none";
+}
+
+// ANIMAÇÃO PRINCIPAL
+window.onload = () => {
+  const kingdom = document.getElementById('kingdom');
+  const craft = document.getElementById('craft');
+  const textoContainer = document.getElementById('textoContainer');
+
+  // Depois do drop do CRAFT
+  craft.addEventListener('animationend', () => {
+    // Tremor da tela
+    textoContainer.style.animation = 'shakeScreen 0.5s';
+
+    // Criar tiros permanentes sobre KINGDOM
+    const rect = kingdom.getBoundingClientRect();
+    for(let i=0;i<15;i++){
+      let tiro = document.createElement('div');
+      tiro.className = 'tiro';
+      tiro.style.top = `${rect.top + Math.random()*rect.height}px`;
+      tiro.style.left = `${rect.left + Math.random()*rect.width}px`;
+      document.body.appendChild(tiro);
+    }
+
+    // Mostrar botões depois dos tiros
+    setTimeout(() => {
+      document.getElementById('botao').style.display = 'block';
+    }, 1000);
+  });
+}
+</script>
+
+</body>
+</html>
